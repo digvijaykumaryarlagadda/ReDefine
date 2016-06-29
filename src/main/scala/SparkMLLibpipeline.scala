@@ -35,7 +35,7 @@ object SparkMLLibpipeline {
     //rescaledData.sort($"features".desc).rdd.saveAsTextFile("topTFIDF")
     //val rescaledData2=rescaledData.rdd
     //rescaledData2.sortBy(we=>we,false)
-    //val topWords = rescale.getTopTFIDFWords(sc, ngramDataFrame.select("ngrams").rdd)
+    ////val topWords = rescale.getTopTFIDFWords(sc, ngramDataFrame.select("ngrams").rdd)
     rescaledData.rdd.saveAsTextFile("output/TFIDFOut");
     spark.stop()
   }
