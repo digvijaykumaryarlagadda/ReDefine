@@ -3,7 +3,7 @@ import org.apache.spark.sql.SparkSession
 import org.apache.spark.{SparkConf, SparkContext}
 object SparkMLLibpipeline {
   def main(args: Array[String]) {
-    //sample
+    //samplejdfa
     System.setProperty("hadoop.home.dir", "C:\\winutils")
     val spark = SparkSession
       .builder
