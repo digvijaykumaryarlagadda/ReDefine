@@ -3,6 +3,7 @@ import org.apache.spark.sql.SparkSession
 import org.apache.spark.{SparkConf, SparkContext}
 object SparkMLLibpipeline {
   def main(args: Array[String]) {
+    //sample
     System.setProperty("hadoop.home.dir", "C:\\winutils")
     val spark = SparkSession
       .builder
@@ -19,6 +20,7 @@ object SparkMLLibpipeline {
       (0, input)
     )).toDF("label")
 */
+
     val tokenizer = new Tokenizer().setInputCol("sentence").setOutputCol("words")
     val wordsData = tokenizer.transform(sentenceData)
     val remover = new StopWordsRemover()
