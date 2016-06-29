@@ -11,6 +11,8 @@ object SparkMLLibpipeline {
       .getOrCreate()
     val sparkConf = new SparkConf().setAppName("SparkWordCount").setMaster("local[*]")
     import spark.implicits._
+    val sc = new SparkContext(sparkConf)
+
     val input = spark.read.text("output/TXTOut.txt").as[String]
     val sentenceData= input.toDF("sentence")
    /* val sentenceData = spark.createDataFrame(Seq(
@@ -35,7 +37,7 @@ object SparkMLLibpipeline {
     //rescaledData.sort($"features".desc).rdd.saveAsTextFile("topTFIDF")
     //val rescaledData2=rescaledData.rdd
     //rescaledData2.sortBy(we=>we,false)
-    val topWords = TopTFIDF.getTopTFIDFWords(spark, rescaledData.select("words").rdd)
+    val topWords = TopTFIDF.getTopTFIDFWords(sc, rescaledData.select("words").rdd)
 
     rescaledData.rdd.saveAsTextFile("output/TFIDFOut");
     spark.stop()
