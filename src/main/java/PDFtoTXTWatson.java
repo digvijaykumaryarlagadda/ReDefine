@@ -21,13 +21,13 @@ public class PDFtoTXTWatson {
                System.out.println(filePath);
                String inputFilePath=filePath.toString();
                File pdf = new File(inputFilePath);
-               System.out.println("Convert pdf document to Text");
+               System.out.println("Converting pdf document to Text\n");
                String normalizedtext = service.convertDocumentToText(pdf).execute();
                System.out.println(normalizedtext);
                BufferedWriter output = null;
                try {
                    String researchArticleName = FilenameUtils.getBaseName(inputFilePath);
-                   System.out.println(researchArticleName);
+                   //System.out.println(researchArticleName);
                    String outputFilePath="output/researchArticlesTXT/"+researchArticleName+".txt";
                    File file = new File(outputFilePath);
                    output = new BufferedWriter(new FileWriter(file));
