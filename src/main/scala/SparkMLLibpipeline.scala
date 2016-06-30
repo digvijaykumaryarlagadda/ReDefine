@@ -60,10 +60,10 @@ object SparkMLLibpipeline {
     //val hadoopConf = new org.apache.hadoop.conf.Configuration()
     //val hdfs = org.apache.hadoop.fs.FileSystem.get(new java.net.URI("hdfs://localhost:9000"), hadoopConf)
     //try { hdfs.delete(new org.apache.hadoop.fs.Path("output/TFIDFOut"), true) } catch { case _ : Throwable => { } }
-    val temp1=sqlContext.sql("select rawfeatures, features  from output1")
+    val temp1=sqlContext.sql("select words, features  from output1")
 
     //rescaledData.rdd.saveAsTextFile("output/TFIDFOut");
-    //temp1.rdd.saveAsTextFile("queryout")
+    temp1.rdd.saveAsTextFile("queryout")
     temp1.show(10)
     spark.stop()
   }
