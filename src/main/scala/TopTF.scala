@@ -8,9 +8,9 @@ import scala.collection.immutable.HashMap
 /**
   * Created by Mayanka on 22-Jun-16.
   */
-object TopTFIDF {
+object TopTF {
 
-  def getTopTFIDFWords(sc: SparkContext, input:RDD[Row]): Array[(String, Double)] = {
+  def getTopTFWords(sc: SparkContext, input:RDD[Row]): Array[(String, Double)] = {
 
     input.foreach(f=>println(f))
     val documentseq = input.map(_.getList(0).toString.replace("[WrappedArray(","").replace(")]","").replace(", ",",").split(",").toSeq)
@@ -20,20 +20,17 @@ object TopTFIDF {
     val tf = hashingTF.transform(documentseq)
     tf.cache()
 
-    val idf = new IDF().fit(tf)
-    val tfidf = idf.transform(tf)
-
-    val tfidfvalues = tfidf.flatMap(f => {
+    val tfidfvalues = tf.flatMap(f => {
       val ff: Array[String] = f.toString.replace(",[", ";").split(";")
       val values = ff(2).replace("]", "").replace(")","").split(",")
       values
     })
-    val tfidfindex = tfidf.flatMap(f => {
+    val tfidfindex = tf.flatMap(f => {
       val ff: Array[String] = f.toString.replace(",[", ";").split(";")
       val indices = ff(1).replace("]", "").replace(")","").split(",")
       indices
     })
-    tfidf.foreach(f => println(f))
+    tf.foreach(f => println(f))
 
     val tfidfData = tfidfindex.zip(tfidfvalues)
     var hm = new HashMap[String, Double]

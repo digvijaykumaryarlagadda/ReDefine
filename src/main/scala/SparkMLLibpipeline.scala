@@ -32,24 +32,34 @@ object SparkMLLibpipeline {
     val hashingTF = new HashingTF()
       .setInputCol("filteredWords").setOutputCol("rawFeatures").setNumFeatures(20)
     val featurizedData = hashingTF.transform(processedWordData)
+    // get top TF words using the same function used to calculate Top TFIDF words
+    val topTFWords = TopTF.getTopTFWords(sc, featurizedData.select("words").rdd)
+    println("TOP tf WORDS: \n\n" + topTFWords.mkString("\n"))
+
+
     val idf = new IDF().setInputCol("rawFeatures").setOutputCol("features")
     val idfModel = idf.fit(featurizedData)
     val rescaledData = idfModel.transform(featurizedData)
     //rescaledData.select("filteredWords","features", "sentence").take(10).foreach(println)
     //rescaledData.orderBy(desc("words")).take(10).foreach(println)
-    rescaledData.printSchema()
+    //rescaledData.printSchema()
     val r2=rescaledData.select("words","features")
     //rescaledData.sort($"features".desc).rdd.saveAsTextFile("topTFIDF")
     //val rescaledData2=rescaledData.rdd
     //rescaledData2.sortBy(we=>we,false)
-    // val topWords = TopTFIDF.getTopTFIDFWords(sc, rescaledData.select("words").rdd)
-    //rescaledData.createOrReplaceTempView("output1")
+    val topTFIDFWords = TopTFIDF.getTopTFIDFWords(sc, rescaledData.select("words").rdd)
+    println("TOP WORDS: \n\n" + topTFIDFWords.mkString("\n"))
 
-    val r3= rescaledData.toDF()
+    //rescaledData.createOrReplaceTempView("output1")
+    //val r3= rescaledData.toDF()
+
     //r3.write.parquet("output1.parquet")
 
+
+    /*Spark SQL code
     val parfile=sqlContext.read.parquet("output1.parquet")
     parfile.createOrReplaceTempView("output1")
+    */
 
     //val parquetfile=output1.registerTemptable("")
     //r3.write.mode(SaveMode.Overwrite).saveAsTable("output1")
@@ -60,11 +70,13 @@ object SparkMLLibpipeline {
     //val hadoopConf = new org.apache.hadoop.conf.Configuration()
     //val hdfs = org.apache.hadoop.fs.FileSystem.get(new java.net.URI("hdfs://localhost:9000"), hadoopConf)
     //try { hdfs.delete(new org.apache.hadoop.fs.Path("output/TFIDFOut"), true) } catch { case _ : Throwable => { } }
+    /* spark SQL code
     val temp1=sqlContext.sql("select words, features  from output1")
-
-    //rescaledData.rdd.saveAsTextFile("output/TFIDFOut");
     temp1.rdd.saveAsTextFile("queryout")
     temp1.show(10)
-    spark.stop()
+   */
+
+    //rescaledData.rdd.saveAsTextFile("output/TFIDFOut");
+     spark.stop()
   }
 }
