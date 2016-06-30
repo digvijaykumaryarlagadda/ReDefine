@@ -50,7 +50,7 @@ object TopTF {
     dd1.foreach(f=>{
       println(f)
     })
-  return dd1.take(20)
+  return dd1.take(100)
   }
 
 }

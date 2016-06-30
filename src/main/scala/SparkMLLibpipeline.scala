@@ -1,12 +1,18 @@
+import java.io.{BufferedWriter, IOException}
+import java.nio.file.{Files, Paths}
 import org.apache.spark.ml.feature.{HashingTF, IDF, StopWordsRemover, Tokenizer}
 import org.apache.spark.sql.{SaveMode, SparkSession}
 import org.apache.spark.{SparkConf, SparkContext}
+
+
 object SparkMLLibpipeline {
   def main(args: Array[String]) {
     System.setProperty("hadoop.home.dir", "C:\\winutils")
+
     val sparkConf = new SparkConf().setAppName("SparkWordCount").setMaster("local[*]")
 
     val sc = new SparkContext(sparkConf)
+    sc.hadoopConfiguration.set("mapreduce.input.fileinputformat.input.dir.recursive","true")
 
     val spark = SparkSession
       .builder
@@ -17,7 +23,7 @@ object SparkMLLibpipeline {
     val sqlContext = new org.apache.spark.sql.SQLContext(sc)
     import spark.implicits._
     val outputpath="output/TFIDFOut"
-    val input = spark.read.text("output/TXTOut.txt").as[String]
+    val input = spark.read.text("output/*").as[String]
     val sentenceData= input.toDF("sentence")
    /* val sentenceData = spark.createDataFrame(Seq(
       (0, input)
