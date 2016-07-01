@@ -1,8 +1,11 @@
-import java.io.{BufferedWriter, IOException}
+import java.io.{BufferedWriter, File, IOException}
 import java.nio.file.{Files, Paths}
+
 import org.apache.spark.ml.feature.{HashingTF, IDF, StopWordsRemover, Tokenizer}
 import org.apache.spark.sql.{SaveMode, SparkSession}
 import org.apache.spark.{SparkConf, SparkContext}
+
+import scala.collection.mutable.ArrayBuffer
 
 
 object SparkMLLibpipeline {
@@ -23,7 +26,11 @@ object SparkMLLibpipeline {
     val sqlContext = new org.apache.spark.sql.SQLContext(sc)
     import spark.implicits._
     val outputpath="output/TFIDFOut"
+
+
     val input = spark.read.text("output/*").as[String]
+
+
     val sentenceData= input.toDF("sentence")
    /* val sentenceData = spark.createDataFrame(Seq(
       (0, input)
