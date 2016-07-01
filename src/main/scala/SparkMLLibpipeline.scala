@@ -25,19 +25,17 @@ object SparkMLLibpipeline {
       //    sparkConf.set("spark.hadoop.validateOutputSpecs", "false")
       val sqlContext = new org.apache.spark.sql.SQLContext(sc)
       import spark.implicits._
-      val outputpath = "output/TFIDFOut"
+
 
     for (file <- new File("output/researchArticlesTXT").listFiles) {
-
       val input = spark.read.text(file.toString).as[String]
-
-
-
       val sentenceData = input.toDF("sentence")
       /* val sentenceData = spark.createDataFrame(Seq(
       (0, input)
-    )).toDF("label")
-*/
+      )).toDF("label")
+      */
+      //sentenceData.rdd.saveAsTextFile(outputpath)
+      val outputpath = "output/"+file.toString
       val tokenizer = new Tokenizer().setInputCol("sentence").setOutputCol("words")
       val wordsData = tokenizer.transform(sentenceData)
       val remover = new StopWordsRemover()
@@ -92,7 +90,8 @@ object SparkMLLibpipeline {
    */
 
       //rescaledData.rdd.saveAsTextFile("output/TFIDFOut");
-      spark.stop()
     }
+    spark.stop()
+
   }
 }
