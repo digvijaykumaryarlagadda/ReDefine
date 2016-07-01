@@ -1,5 +1,5 @@
-import java.io.{BufferedWriter, File, IOException}
-import java.nio.file.{Files, Paths}
+import java.io.{FileNotFoundException, _}
+import java.nio.file.{Files, Paths, StandardOpenOption}
 
 import org.apache.commons.io.FilenameUtils
 import org.apache.spark.ml.feature.{HashingTF, IDF, StopWordsRemover, Tokenizer}
@@ -38,22 +38,42 @@ object SparkMLLibpipeline {
       val researchArticleName: String = FilenameUtils.getBaseName(file.toString)
 
       val outputpath = "output/sparkOutput"+researchArticleName
-      sentenceData.rdd.saveAsTextFile(outputpath)
+
 
       val tokenizer = new Tokenizer().setInputCol("sentence").setOutputCol("words")
       val wordsData = tokenizer.transform(sentenceData)
-      val remover = new StopWordsRemover()
+     val remover = new StopWordsRemover()
         .setInputCol("words")
         .setOutputCol("filteredWords")
-      val processedWordData = remover.transform(wordsData)
+     // val processedWordData = remover.transform(wordsData)
+     val processedWordData = remover.setStopWords(remover.getStopWords).transform(wordsData)
+
+
+      //wordsData.rdd.saveAsTextFile("output/tokenizerOutput")
       val hashingTF = new HashingTF()
         .setInputCol("filteredWords").setOutputCol("rawFeatures").setNumFeatures(20)
       val featurizedData = hashingTF.transform(processedWordData)
       // get top TF words using the same function used to calculate Top TFIDF words
+
       val topTFWords = TopTF.getTopTFWords(sc, featurizedData.select("words").rdd)
-      println("TOP tf WORDS: \n\n" + topTFWords.mkString("\n"))
+     // println("TOP tf WORDS: \n\n" + topTFWords.mkString("\n"))
 
+      try {
+        val fileTFIDF = new File("output/topTFWords/"+researchArticleName+".txt")
+        fileTFIDF.getParentFile().mkdirs()
+        val writer = new FileWriter(fileTFIDF)
+        for (x <- topTFWords){
+          writer.write(x.toString()+"\n")}
+        writer.close()
+      } catch {
+        case ex: FileNotFoundException =>{
+          println("Missing file exception")
+        }
 
+        case ex: IOException => {
+          println("IO Exception")
+        }
+      }
       val idf = new IDF().setInputCol("rawFeatures").setOutputCol("features")
       val idfModel = idf.fit(featurizedData)
       val rescaledData = idfModel.transform(featurizedData)
@@ -65,7 +85,27 @@ object SparkMLLibpipeline {
       //val rescaledData2=rescaledData.rdd
       //rescaledData2.sortBy(we=>we,false)
       val topTFIDFWords = TopTFIDF.getTopTFIDFWords(sc, rescaledData.select("words").rdd)
-      println("TOP WORDS: \n\n" + topTFIDFWords.mkString("\n"))
+    //  println("TOP WORDS: \n\n" + topTFIDFWords.mkString("\n"))
+      try {
+        val fileTFIDF = new File("output/topTFIDFWords/"+researchArticleName+".txt")
+        fileTFIDF.getParentFile().mkdirs()
+        val writer = new FileWriter(fileTFIDF)
+        for (x <- topTFIDFWords){
+        writer.write(x.toString()+"\n")}
+        writer.close()
+      } catch {
+        case ex: FileNotFoundException =>{
+          println("Missing file exception")
+        }
+
+        case ex: IOException => {
+          println("IO Exception")
+        }
+      }
+
+
+
+
 
       //rescaledData.createOrReplaceTempView("output1")
       //val r3= rescaledData.toDF()
