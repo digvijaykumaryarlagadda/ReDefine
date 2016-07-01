@@ -1,6 +1,7 @@
 import java.io.{BufferedWriter, File, IOException}
 import java.nio.file.{Files, Paths}
 
+import org.apache.commons.io.FilenameUtils
 import org.apache.spark.ml.feature.{HashingTF, IDF, StopWordsRemover, Tokenizer}
 import org.apache.spark.sql.{SaveMode, SparkSession}
 import org.apache.spark.{SparkConf, SparkContext}
@@ -34,8 +35,11 @@ object SparkMLLibpipeline {
       (0, input)
       )).toDF("label")
       */
-      //sentenceData.rdd.saveAsTextFile(outputpath)
-      val outputpath = "output/"+file.toString
+      val researchArticleName: String = FilenameUtils.getBaseName(file.toString)
+
+      val outputpath = "output/sparkOutput"+researchArticleName
+      sentenceData.rdd.saveAsTextFile(outputpath)
+
       val tokenizer = new Tokenizer().setInputCol("sentence").setOutputCol("words")
       val wordsData = tokenizer.transform(sentenceData)
       val remover = new StopWordsRemover()
