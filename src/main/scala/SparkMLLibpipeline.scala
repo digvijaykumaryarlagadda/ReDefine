@@ -1,31 +1,31 @@
 import java.io.{FileNotFoundException, _}
 import java.nio.file.{Files, Paths, StandardOpenOption}
-
+import scala.io.Source
 import org.apache.commons.io.FilenameUtils
 import org.apache.spark.ml.feature.{HashingTF, IDF, StopWordsRemover, Tokenizer}
 import org.apache.spark.sql.{SaveMode, SparkSession}
 import org.apache.spark.{SparkConf, SparkContext}
 
 import scala.collection.mutable.ArrayBuffer
+import scala.io.BufferedSource
 
 
 object SparkMLLibpipeline {
   def main(args: Array[String]) {
-      System.setProperty("hadoop.home.dir", "C:\\winutils")
+    System.setProperty("hadoop.home.dir", "C:\\winutils")
 
-      val sparkConf = new SparkConf().setAppName("SparkWordCount").setMaster("local[*]")
+    val sparkConf = new SparkConf().setAppName("SparkWordCount").setMaster("local[*]")
+    sparkConf.set("spark.hadoop.validateOutputSpecs", "false")
+    val sc = new SparkContext(sparkConf)
+    sc.hadoopConfiguration.set("mapreduce.input.fileinputformat.input.dir.recursive", "true")
 
-      val sc = new SparkContext(sparkConf)
-      sc.hadoopConfiguration.set("mapreduce.input.fileinputformat.input.dir.recursive", "true")
-
-      val spark = SparkSession
-        .builder
-        .appName("TfIdfExample")
-        .master("local[*]")
-        .getOrCreate()
-      //    sparkConf.set("spark.hadoop.validateOutputSpecs", "false")
-      val sqlContext = new org.apache.spark.sql.SQLContext(sc)
-      import spark.implicits._
+    val spark = SparkSession
+      .builder
+      .appName("TfIdfExample")
+      .master("local[*]")
+      .getOrCreate()
+    val sqlContext = new org.apache.spark.sql.SQLContext(sc)
+    import spark.implicits._
 
 
     for (file <- new File("output/researchArticlesTXT").listFiles) {
@@ -36,27 +36,26 @@ object SparkMLLibpipeline {
       )).toDF("label")
       */
       val researchArticleName: String = FilenameUtils.getBaseName(file.toString)
-
-      val outputpath = "output/sparkOutput"+researchArticleName
-
-
       val tokenizer = new Tokenizer().setInputCol("sentence").setOutputCol("words")
       val wordsData = tokenizer.transform(sentenceData)
-     val remover = new StopWordsRemover()
+
+      val stopWordLines: Array[String] = Source.fromFile("resources/stopwords.txt").getLines.toArray
+      val remover = new StopWordsRemover()
         .setInputCol("words")
         .setOutputCol("filteredWords")
-     // val processedWordData = remover.transform(wordsData)
-     val processedWordData = remover.setStopWords(remover.getStopWords).transform(wordsData)
+        .setStopWords(stopWordLines)
+      val processedWordData = remover.setStopWords(stopWordLines).transform(wordsData)
 
+      //wordsData.rdd.saveAsTextFile("output/tokenizerOutput/paper1.txt")
+      //processedWordData.rdd.saveAsTextFile("output/stopWordRemover/paper1.txt")
 
-      //wordsData.rdd.saveAsTextFile("output/tokenizerOutput")
       val hashingTF = new HashingTF()
         .setInputCol("filteredWords").setOutputCol("rawFeatures").setNumFeatures(20)
       val featurizedData = hashingTF.transform(processedWordData)
       // get top TF words using the same function used to calculate Top TFIDF words
 
-      val topTFWords = TopTF.getTopTFWords(sc, featurizedData.select("words").rdd)
-     // println("TOP tf WORDS: \n\n" + topTFWords.mkString("\n"))
+      val topTFWords = TopTF.getTopTFWords(sc, featurizedData.select("filteredWords").rdd)
+      // println("TOP tf WORDS: \n\n" + topTFWords.mkString("\n"))
 
       try {
         val fileTFIDF = new File("output/topTFWords/"+researchArticleName+".txt")
@@ -80,18 +79,18 @@ object SparkMLLibpipeline {
       //rescaledData.select("filteredWords","features", "sentence").take(10).foreach(println)
       //rescaledData.orderBy(desc("words")).take(10).foreach(println)
       //rescaledData.printSchema()
-      val r2 = rescaledData.select("words", "features")
+      val r2 = rescaledData.select("filteredWords", "features")
       //rescaledData.sort($"features".desc).rdd.saveAsTextFile("topTFIDF")
       //val rescaledData2=rescaledData.rdd
       //rescaledData2.sortBy(we=>we,false)
-      val topTFIDFWords = TopTFIDF.getTopTFIDFWords(sc, rescaledData.select("words").rdd)
-    //  println("TOP WORDS: \n\n" + topTFIDFWords.mkString("\n"))
+      val topTFIDFWords = TopTFIDF.getTopTFIDFWords(sc, rescaledData.select("filteredWords").rdd)
+      //  println("TOP WORDS: \n\n" + topTFIDFWords.mkString("\n"))
       try {
         val fileTFIDF = new File("output/topTFIDFWords/"+researchArticleName+".txt")
         fileTFIDF.getParentFile().mkdirs()
         val writer = new FileWriter(fileTFIDF)
         for (x <- topTFIDFWords){
-        writer.write(x.toString()+"\n")}
+          writer.write(x.toString()+"\n")}
         writer.close()
       } catch {
         case ex: FileNotFoundException =>{
@@ -136,6 +135,6 @@ object SparkMLLibpipeline {
       //rescaledData.rdd.saveAsTextFile("output/TFIDFOut");
     }
     spark.stop()
-
   }
+
 }
