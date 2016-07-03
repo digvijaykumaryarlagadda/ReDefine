@@ -14,7 +14,7 @@ import java.io.*;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-public class CoreNLP {
+public class CoreNLPLemma {
     public static void main(String args[]) throws IOException{
         Properties props = new Properties();
         props.setProperty("annotators", "tokenize, ssplit, pos, lemma, ner, parse, dcoref");

@@ -1,7 +1,9 @@
 import java.io.{FileNotFoundException, _}
 import java.nio.file.{Files, Paths, StandardOpenOption}
+
 import scala.io.Source
 import org.apache.commons.io.FilenameUtils
+import org.apache.log4j.{Level, Logger}
 import org.apache.spark.ml.feature.{HashingTF, IDF, StopWordsRemover, Tokenizer}
 import org.apache.spark.sql.{SaveMode, SparkSession}
 import org.apache.spark.{SparkConf, SparkContext}
@@ -26,7 +28,8 @@ object SparkMLLibpipeline {
       .getOrCreate()
     val sqlContext = new org.apache.spark.sql.SQLContext(sc)
     import spark.implicits._
-
+    Logger.getLogger("org").setLevel(Level.OFF)
+    Logger.getLogger("akka").setLevel(Level.OFF)
 
     for (file <- new File("output/researchArticlesTXT").listFiles) {
       val input = spark.read.text(file.toString).as[String]
