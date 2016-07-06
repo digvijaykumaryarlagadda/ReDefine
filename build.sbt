@@ -17,7 +17,10 @@ libraryDependencies ++= Seq(
   "org.apache.spark" % "spark-sql_2.11" % "2.0.0-preview",
   "org.apache.pdfbox" % "pdfbox" % "1.8.2",
   "org.apache.pdfbox" % "xmpbox" % "1.8.0",
-  "edu.washington.cs.knowitall.openie" % "openie_2.10" % "4.1"
+  "edu.washington.cs.knowitall.openie" % "openie_2.10" % "4.1",
+  "com.googlecode.clearnlp" % "clearnlp" % "1.3.1",
+"edu.washington.cs.knowitall.ollie" % "ollie-core_2.10" % "1.0.3",
+  "org.maltparser" % "maltparser" % "1.7"
 
 
 )

@@ -51,7 +51,7 @@ object TopTFIDF {
 
     val dd1=dd.distinct().sortBy(_._2,false)
     dd1.foreach(f=>{
-      println(f)
+      //println(f)
     })
   return dd1.take(20)
   }

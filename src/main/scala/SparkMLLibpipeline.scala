@@ -109,16 +109,16 @@ object SparkMLLibpipeline {
 
 
 
-      //rescaledData.createOrReplaceTempView("output1")
+//      rescaledData.createOrReplaceTempView("output1")
       //val r3= rescaledData.toDF()
-
+////
       //r3.write.parquet("output1.parquet")
 
 
-      /*Spark SQL code
-    val parfile=sqlContext.read.parquet("output1.parquet")
-    parfile.createOrReplaceTempView("output1")
-    */
+      //Spark SQL code
+    //val parfile=sqlContext.read.parquet("output1.parquet")
+    //parfile.createOrReplaceTempView("output2")
+
 
       //val parquetfile=output1.registerTemptable("")
       //r3.write.mode(SaveMode.Overwrite).saveAsTable("output1")
@@ -129,11 +129,11 @@ object SparkMLLibpipeline {
       //val hadoopConf = new org.apache.hadoop.conf.Configuration()
       //val hdfs = org.apache.hadoop.fs.FileSystem.get(new java.net.URI("hdfs://localhost:9000"), hadoopConf)
       //try { hdfs.delete(new org.apache.hadoop.fs.Path("output/TFIDFOut"), true) } catch { case _ : Throwable => { } }
-      /* spark SQL code
-    val temp1=sqlContext.sql("select words, features  from output1")
-    temp1.rdd.saveAsTextFile("queryout")
-    temp1.show(10)
-   */
+      // spark SQL code
+ //   val temp1=sqlContext.sql("select words, features  from output2")
+//    temp1.rdd.saveAsTextFile("queryout")
+   // temp1.show(10)
+   //
 
       //rescaledData.rdd.saveAsTextFile("output/TFIDFOut");
     }

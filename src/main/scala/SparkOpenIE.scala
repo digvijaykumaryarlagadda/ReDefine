@@ -6,6 +6,8 @@ import org.apache.spark.{SparkConf, SparkContext}
 object SparkOpenIE {
 
   def main(args: Array[String]) {
+    System.setProperty("hadoop.home.dir", "C:\\winutils");
+
     val sparkConf = new SparkConf().setAppName("SparkWordCount").setMaster("local[*]")
 
     val sc = new SparkContext(sparkConf)
