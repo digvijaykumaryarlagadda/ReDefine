@@ -17,10 +17,19 @@ libraryDependencies ++= Seq(
   "org.apache.spark" % "spark-sql_2.11" % "2.0.0-preview",
   "org.apache.pdfbox" % "pdfbox" % "1.8.2",
   "org.apache.pdfbox" % "xmpbox" % "1.8.0",
-  "edu.washington.cs.knowitall.openie" % "openie_2.10" % "4.1",
-  "com.googlecode.clearnlp" % "clearnlp" % "1.3.1",
-"edu.washington.cs.knowitall.ollie" % "ollie-core_2.10" % "1.0.3",
-  "org.maltparser" % "maltparser" % "1.7"
+ //"edu.washington.cs.knowitall.openie" % "openie_2.10" % "4.1",
+//  "org.allenai.openie" %% "openie" % "4.2.4",
+"com.googlecode.clearnlp" % "clearnlp" % "1.3.1"
+  // https://mvnrepository.com/artifact/edu.washington.cs.knowitall.nlptools/nlptools-core_2.10
+  // https://mvnrepository.com/artifact/edu.washington.cs.knowitall.nlptools/nlptools-parse-clear_2.10
+//"edu.washington.cs.knowitall.nlptools" % "nlptools-parse-clear_2.10" % "2.4.5",
+
+  //"edu.washington.cs.knowitall.nlptools" % "nlptools-core_2.10" % "2.4.5",
+
+  //  "edu.washington.cs.knowitall.nlptools" % "nlptools-core_2.9.2" % "2.4.1"
+
+  //"edu.washington.cs.knowitall.ollie" % "ollie-core_2.10" % "1.0.3",
+  //"org.maltparser" % "maltparser" % "1.7"
 
 
 )
