@@ -1,0 +1,16 @@
+It is often assumed that Big Data resources are too large and
+
+complex for human comprehension. The analysis of Big Data
+
+is best left to software programs. Not so.
+
+When data analysts go straight to the complex calculations,
+
+before they perform a simple estimation, they will find
+
+themselves accepting wildly ridiculous calculations. [3] Rapid
+
+increases in high performance computing sets the stage for so-
+
+called "big data" analysis challenges. However, conventional climate analysis techniques are inadequate in dealing with the
+

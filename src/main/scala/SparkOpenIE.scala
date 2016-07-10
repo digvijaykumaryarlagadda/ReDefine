@@ -21,14 +21,14 @@ object SparkOpenIE {
     //Logger.getLogger("org").setLevel(Level.OFF)
     //Logger.getLogger("akka").setLevel(Level.OFF)
 
-    val input = sc.textFile("output/researchArticlesTXT/A Large-Scale Empirical study on software reuse in mobile apps.txt").map(line => {
+    val input = sc.textFile("output/researchArticlesTXT/A Large-Scale Empirical study on software reuse in mobile apps.txt").map((line: String) => {
       val t=CoreNLPOpenIE.returnTriplets(line)
       t
     })
 
-    println(input.collect().mkString("\n"))
+    println(input.collect().mkString("\n")+"\n")
 
-
+  val temp = "just for debugging"
 
   }
 

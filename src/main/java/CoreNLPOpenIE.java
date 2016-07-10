@@ -14,7 +14,7 @@ public class CoreNLPOpenIE {
             for (int i = 0; i < l.toArray().length ; i++) {
                 lemma+= l.toString();
             }
-            System.out.println(lemma);
+            System.out.println(lemma+"\n");
         }
         return lemma;
     }

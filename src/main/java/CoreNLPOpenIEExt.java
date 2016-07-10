@@ -42,7 +42,7 @@ public class CoreNLPOpenIEExt {
             text = IOUtils.slurpFile(args[0]);
         } else {
             String mystr = null;
-            Path path = Paths.get("output/researchArticlesTXT/A Large-Scale Empirical study on software reuse in mobile apps.txt");
+            Path path = Paths.get("output/researchArticlesTXT/A Dashboard of an Education Data Portal using Big Data Solutions.txt");
             try (BufferedReader reader = Files.newBufferedReader(path, ENCODING)){
                 String line = null;
                 while ((line = reader.readLine()) != null) {
@@ -65,14 +65,13 @@ public class CoreNLPOpenIEExt {
             // Get the OpenIE triples for the sentence
             Collection<RelationTriple> triples = sentence.get(NaturalLogicAnnotations.RelationTriplesAnnotation.class);
 
-  /*          // Print the triples
+            // Print the triples
             for (RelationTriple triple : triples) {
                 System.out.println(triple.confidence + "\t" +
                         triple.subjectLemmaGloss() + "\t" +
                         triple.relationLemmaGloss() + "\t" +
                         triple.objectLemmaGloss());
             }
-*/
             // Alternately, to only run e.g., the clause splitter:
             List<SentenceFragment> clauses = new OpenIE(props).clausesInSentence(sentence);
             for (SentenceFragment clause : clauses) {

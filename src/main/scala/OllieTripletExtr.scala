@@ -1,12 +1,13 @@
+
 package ollie
 
-import edu.knowitall.ollie.Ollie
+/*import edu.knowitall.ollie.Ollie
 //import edu.knowitall.tool.parse.MaltParser
 
 import scala.io.Source
 import edu.knowitall.ollie.confidence.OllieConfidenceFunction
 import org.maltparser.{Malt, MaltParserService}
-import org.maltparser.parser.Parser
+import org.maltparser.parser.Parser*/
 
 /** This is an example project that takes lines as input from stdin,
   * parses them, runs the Ollie extractor on them, scores the
@@ -22,7 +23,7 @@ import org.maltparser.parser.Parser
   *   http://www.maltparser.org/mco/english_parser/engmalt.html
   */
 object OllieTripletExtr extends App {
-  val parser = new MaltParserService()
+  /*val parser = new MaltParserService()
 
   val ollie = new Ollie
   val confidence = OllieConfidenceFunction.loadDefaultClassifier()
@@ -37,5 +38,5 @@ object OllieTripletExtr extends App {
       //println(("%.2f" format conf) + "\t" + inst.extraction)
     //}
     //println("Waiting for next input...")
-  //}
+  //}*/
 }

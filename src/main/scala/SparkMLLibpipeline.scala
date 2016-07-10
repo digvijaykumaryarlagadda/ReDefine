@@ -57,7 +57,7 @@ object SparkMLLibpipeline {
       val featurizedData = hashingTF.transform(processedWordData)
       // get top TF words using the same function used to calculate Top TFIDF words
 
-      val topTFWords = TopTF.getTopTFWords(sc, featurizedData.select("filteredWords").rdd)
+      val topTFWords: Array[(String, Double)] = TopTF.getTopTFWords(sc, featurizedData.select("filteredWords").rdd)
       // println("TOP tf WORDS: \n\n" + topTFWords.mkString("\n"))
 
       try {
@@ -104,10 +104,6 @@ object SparkMLLibpipeline {
           println("IO Exception")
         }
       }
-
-
-
-
 
 //      rescaledData.createOrReplaceTempView("output1")
       //val r3= rescaledData.toDF()
