@@ -42,7 +42,7 @@ object SparkMLLibpipeline {
       val tokenizer = new Tokenizer().setInputCol("sentence").setOutputCol("words")
       val wordsData = tokenizer.transform(sentenceData)
 
-      val stopWordLines: Array[String] = Source.fromFile("resources/stopwords.txt").getLines.toArray
+      val stopWordLines: Array[String] = Source.fromFile("src/main/resources/stopwords.txt").getLines.toArray
       val remover = new StopWordsRemover()
         .setInputCol("words")
         .setOutputCol("filteredWords")
@@ -51,7 +51,7 @@ object SparkMLLibpipeline {
 
       //wordsData.rdd.saveAsTextFile("output/tokenizerOutput/paper1.txt")
       //processedWordData.rdd.saveAsTextFile("output/stopWordRemover/paper1.txt")
-
+      //processedWordData.select("filteredWords").rdd.saveAsTextFile("output/stopWordRemover/paper1.txt")
       val hashingTF = new HashingTF()
         .setInputCol("filteredWords").setOutputCol("rawFeatures").setNumFeatures(20)
       val featurizedData = hashingTF.transform(processedWordData)

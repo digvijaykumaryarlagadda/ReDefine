@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ScalaCompilerConfiguration">
-    <profile name="SBT 1" modules="redefine" />
+    <profile name="SBT 1" modules="service,redefine">
+      <option name="deprecationWarnings" value="true" />
+      <option name="featureWarnings" value="true" />
+      <parameters>
+        <parameter value="-target:jvm-1.7" />
+        <parameter value="-Xlint" />
+      </parameters>
+    </profile>
   </component>
 </project>

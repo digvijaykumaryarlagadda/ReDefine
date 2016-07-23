@@ -4,14 +4,12 @@ import org.apache.spark.sql.SparkSession
 import org.apache.spark.{SparkConf, SparkContext}
 import scala.io.Source
 
-
-/**
-  * Created by Mayanka on 21-Jun-16.
-  */
 object SparkW2VML {
   def main(args: Array[String]) {
 
     // Configuration
+    System.setProperty("hadoop.home.dir", "C:\\winutils")
+
     val sparkConf = new SparkConf().setAppName("SparkWordCount").setMaster("local[*]")
 
     val sc = new SparkContext(sparkConf)
@@ -48,7 +46,7 @@ object SparkW2VML {
       .setInputCol("words")
       .setOutputCol("filteredWords")
     val processedWordData = remover.transform(wordsData) */
-    val stopWordLines: Array[String] = Source.fromFile("resources/stopwords.txt").getLines.toArray
+    val stopWordLines: Array[String] = Source.fromFile("src/main/resources/stopwords.txt").getLines.toArray
     val remover = new StopWordsRemover()
       .setInputCol("words")
       .setOutputCol("tokens")
